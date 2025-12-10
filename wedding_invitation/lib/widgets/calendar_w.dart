@@ -108,7 +108,7 @@ class CalendarWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '10 января - наша свадьба',
+                    '10.01.2026 - наша свадьба',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
                       fontSize: 14,

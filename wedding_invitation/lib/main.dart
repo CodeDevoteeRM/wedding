@@ -238,14 +238,10 @@ class _WeddingInvitationState extends State<WeddingInvitation>
             // Основной контент
             ListView(
               children: [
-                _buildHeader(),
+                // _buildHeader(),
                 _buildMainCard(),
                 LocationWidget(style: LocationStyle.elegant),
-                TableArrangementWidget(
-                  style: TableArrangementStyle.elegant,
-                  title: 'Рассадка гостей',
-                  totalGuests: 70,
-                ),
+                TableArrangementWidget(),
                 _buildFooter(),
               ],
             ),
@@ -255,29 +251,29 @@ class _WeddingInvitationState extends State<WeddingInvitation>
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.only(top: 50, bottom: 20),
-      child: Column(
-        children: [
-          Text(
-            'Приглашение на свадьбу',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w300,
-              letterSpacing: 3,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Container(
-            height: 1,
-            width: 80,
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildHeader() {
+  //   return Container(
+  //     padding: const EdgeInsets.only(top: 50, bottom: 20),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           'Приглашение на свадьбу',
+  //           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+  //             color: Theme.of(context).colorScheme.primary,
+  //             fontWeight: FontWeight.w300,
+  //             letterSpacing: 3,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 15),
+  //         Container(
+  //           height: 1,
+  //           width: 80,
+  //           color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildMainCard() {
     return Container(
@@ -294,35 +290,35 @@ class _WeddingInvitationState extends State<WeddingInvitation>
             ),
           ),
           const SizedBox(height: 30),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Image.asset(
-              'assets/frame.png',
-              height: 180,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 180,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.secondary.withOpacity(0.3),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Роман и Рузанна',
-                      style: TextStyle(fontSize: 18, color: Color(0xFF2C3E50)),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 30),
+          // Container(
+          //   padding: const EdgeInsets.symmetric(vertical: 20),
+          //   child: Image.asset(
+          //     'assets/frame.png',
+          //     height: 180,
+          //     fit: BoxFit.contain,
+          //     errorBuilder: (context, error, stackTrace) {
+          //       return Container(
+          //         height: 180,
+          //         decoration: BoxDecoration(
+          //           border: Border.all(
+          //             color: Theme.of(
+          //               context,
+          //             ).colorScheme.secondary.withOpacity(0.3),
+          //             width: 1,
+          //           ),
+          //           borderRadius: BorderRadius.circular(10),
+          //         ),
+          //         child: const Center(
+          //           child: Text(
+          //             'Роман и Рузанна',
+          //             style: TextStyle(fontSize: 18, color: Color(0xFF2C3E50)),
+          //           ),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+          // const SizedBox(height: 30),
           _buildCalendarHeart(),
           const SizedBox(height: 10),
           Column(
