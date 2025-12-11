@@ -1,13 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:wedding_invitation/utils/calendar_u.dart';
-import 'package:wedding_invitation/widgets/add_to_calendar_but.dart'
-    as calendar_button;
-import 'package:wedding_invitation/widgets/calendar_w.dart' as calendar_widget;
+import 'package:wedding_invitation/widgets/calendar.dart' as calendar_widget;
 import 'package:wedding_invitation/widgets/location_w.dart';
+import 'package:wedding_invitation/widgets/main_header.dart';
 import 'package:wedding_invitation/widgets/schedule_w.dart' hide ScheduleItem;
-import 'package:wedding_invitation/widgets/table_arrangement_w.dart';
+import 'package:wedding_invitation/widgets/table_arrangement.dart';
 import 'types.dart';
 
 void main() {
@@ -24,9 +22,15 @@ class WeddingApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Gnocchi',
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFE8F4F8),
-          primary: const Color(0xFF2C3E50),
-          secondary: const Color(0xFFC19A6B),
+          seedColor: const Color(0xFF91B287), // Основной мягкий зеленый
+          primary: const Color(0xFF4C6444), // Темный зеленый
+          onPrimary: Colors.white,
+          secondary: const Color(0xFF765B50), // Коричневый
+          onSecondary: Colors.white,
+          tertiary: const Color(0xFFBA9B8E), // Светлый бежевый
+          surface: const Color(0xFFF8F4F0), // Светлый фон
+          background: const Color(0xFFF5F0EB), // Фон
+          error: const Color(0xFFD32F2F),
         ),
         useMaterial3: true,
       ),
@@ -42,12 +46,12 @@ class SaveDateWavePainter extends CustomPainter {
 
   SaveDateWavePainter({
     required this.phase,
-    this.color = const Color(0xFF2C3E50),
+    this.color = const Color(0xFF4C6444), // Изменен на темный зеленый
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    const startY = 120.0;
+    const startY = 70.0;
     const fontSize = 16.0;
 
     final text =
@@ -56,7 +60,7 @@ class SaveDateWavePainter extends CustomPainter {
     // Используем шрифт Gnocchi
     final textStyle = TextStyle(
       fontFamily: 'Gnocchi',
-      color: color.withOpacity(0.25),
+      color: color.withOpacity(0.2), // Более прозрачный цвет
       fontSize: fontSize,
       fontWeight: FontWeight.w400,
       letterSpacing: 10,
@@ -121,7 +125,9 @@ class SaveDateWavePainter extends CustomPainter {
       final letter = text[i];
       final textSpan = TextSpan(
         text: letter,
-        style: textStyle.copyWith(color: color.withOpacity(0.15)),
+        style: textStyle.copyWith(
+          color: color.withOpacity(0.1),
+        ), // Еще более прозрачный
       );
 
       final textPainter = TextPainter(
@@ -208,124 +214,54 @@ class _WeddingInvitationState extends State<WeddingInvitation>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFE8F4F8), Color(0xFFB8D8E8)],
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 150,
-              child: AnimatedBuilder(
-                animation: _animationController,
-                builder: (context, child) {
-                  return CustomPaint(
-                    painter: SaveDateWavePainter(
-                      phase: _animationController.value * 2 * pi,
-                      color: Colors.black,
-                    ),
-                  );
-                },
-              ),
-            ),
-            // Основной контент
-            ListView(
-              children: [
-                // _buildHeader(),
-                _buildMainCard(),
-                LocationWidget(style: LocationStyle.elegant),
-                TableArrangementWidget(),
-                _buildFooter(),
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFF8F4F0), // Светлый верх
+                Color(0xFFF5F0EB), // Светлый низ
               ],
             ),
-          ],
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 150,
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return CustomPaint(
+                      painter: SaveDateWavePainter(
+                        phase: _animationController.value * 2 * pi,
+                        color: const Color(0xFF4C6444),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Основной контент
+              Column(
+                children: [
+                  AnimatedHeaderWidget(),
+                  _buildCalendarHeart(),
+                  ScheduleWidget(
+                    style: ScheduleStyle.elegant,
+                    customTitle: 'Расписание свадебного дня',
+                  ),
+                  LocationWidget(style: LocationStyle.elegant),
+                  TableArrangementWidget(),
+                  _buildFooter(),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
-
-  // Widget _buildHeader() {
-  //   return Container(
-  //     padding: const EdgeInsets.only(top: 50, bottom: 20),
-  //     child: Column(
-  //       children: [
-  //         Text(
-  //           'Приглашение на свадьбу',
-  //           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-  //             color: Theme.of(context).colorScheme.primary,
-  //             fontWeight: FontWeight.w300,
-  //             letterSpacing: 3,
-  //           ),
-  //         ),
-  //         const SizedBox(height: 15),
-  //         Container(
-  //           height: 1,
-  //           width: 80,
-  //           color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _buildMainCard() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-      child: Column(
-        children: [
-          Text(
-            'Роман & Рузанна',
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w400,
-              fontSize: 42,
-              letterSpacing: 1,
-            ),
-          ),
-          const SizedBox(height: 30),
-          // Container(
-          //   padding: const EdgeInsets.symmetric(vertical: 20),
-          //   child: Image.asset(
-          //     'assets/frame.png',
-          //     height: 180,
-          //     fit: BoxFit.contain,
-          //     errorBuilder: (context, error, stackTrace) {
-          //       return Container(
-          //         height: 180,
-          //         decoration: BoxDecoration(
-          //           border: Border.all(
-          //             color: Theme.of(
-          //               context,
-          //             ).colorScheme.secondary.withOpacity(0.3),
-          //             width: 1,
-          //           ),
-          //           borderRadius: BorderRadius.circular(10),
-          //         ),
-          //         child: const Center(
-          //           child: Text(
-          //             'Роман и Рузанна',
-          //             style: TextStyle(fontSize: 18, color: Color(0xFF2C3E50)),
-          //           ),
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
-          // const SizedBox(height: 30),
-          _buildCalendarHeart(),
-          const SizedBox(height: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [ScheduleWidget()],
-          ),
-        ],
       ),
     );
   }
@@ -336,26 +272,24 @@ class _WeddingInvitationState extends State<WeddingInvitation>
         calendar_widget.CalendarWidget(
           animationController: _animationController,
         ),
-        // calendar_button.AddToCalendarButton(
-        //   onPressed: () {
-        //     CalendarService.showConfirmationDialog(context);
-        //   },
-        // ),
       ],
     );
   }
 
   Widget _buildFooter() {
     return Padding(
-      padding: const EdgeInsets.only(top: 40, bottom: 60, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 20, bottom: 60, left: 20, right: 20),
       child: Column(
         children: [
           Text(
             'С любовью,\nРоман и Рузанна',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
-              fontSize: 14,
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withOpacity(0.7), // Более насыщенный
+              fontSize: 16, // Немного больше
               height: 1.4,
+              fontStyle: FontStyle.italic,
             ),
             textAlign: TextAlign.center,
           ),

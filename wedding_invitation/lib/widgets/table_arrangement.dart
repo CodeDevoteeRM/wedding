@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'table_types.dart';
 import 'table_search.dart';
-import 'table_card.dart';
+import 'placement_card.dart';
 
 class TableArrangementWidget extends StatefulWidget {
   final String title;
@@ -133,9 +133,10 @@ class _TableArrangementWidgetState extends State<TableArrangementWidget> {
     if (_searchQuery.isEmpty) return _tables;
 
     return _tables.where((table) {
-      return table.guests.any(
-        (guest) => guest.toLowerCase().contains(_searchQuery.toLowerCase()),
-      );
+      return table.number.toString().contains(_searchQuery) ||
+          table.guests.any(
+            (guest) => guest.toLowerCase().contains(_searchQuery.toLowerCase()),
+          );
     }).toList();
   }
 
@@ -144,11 +145,11 @@ class _TableArrangementWidgetState extends State<TableArrangementWidget> {
       _searchQuery = query;
 
       if (query.isNotEmpty) {
-        // Находим первый совпадающий стол
         for (final table in _tables) {
-          if (table.guests.any(
-            (guest) => guest.toLowerCase().contains(query.toLowerCase()),
-          )) {
+          if (table.number.toString().contains(query) ||
+              table.guests.any(
+                (guest) => guest.toLowerCase().contains(query.toLowerCase()),
+              )) {
             _highlightedTable = table;
             return;
           }
@@ -164,74 +165,65 @@ class _TableArrangementWidgetState extends State<TableArrangementWidget> {
     final colorScheme = _getColorScheme(context);
     final filteredTables = _filteredTables;
 
-    return Center(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 800),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Заголовок
-            Container(
-              margin: const EdgeInsets.only(bottom: 24),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.people_alt_rounded,
-                    color: colorScheme.primary,
-                    size: 36,
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 1200),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Заголовок
+          Container(
+            margin: const EdgeInsets.only(bottom: 24),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.people_alt_rounded,
+                  color: const Color(0xFF4C6444),
+                  size: 36,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF4C6444),
+                    letterSpacing: 0.5,
+                    fontFamily: 'Gnocchi',
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.primary,
-                      letterSpacing: 0.5,
-                    ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  widget.subtitle,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: const Color(0xFF4C6444).withOpacity(0.7),
+                    fontStyle: FontStyle.italic,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.subtitle,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: colorScheme.primary.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            // Поисковая строка
-            TableSearchWidget(
+          // Поисковая строка
+          Container(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: TableSearchWidget(
               tables: _tables,
               onSearchChanged: _onSearchChanged,
               colorScheme: colorScheme,
             ),
+          ),
 
-            const SizedBox(height: 24),
-
-            // Сетка столов с гостями
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
-              childAspectRatio: 1.5,
-              children: filteredTables.map((table) {
-                return TableCardWidget(
-                  table: table,
-                  searchQuery: _searchQuery,
-                  isHighlighted: _highlightedTable?.number == table.number,
-                  colorScheme: colorScheme,
-                  style: widget.style,
-                );
-              }).toList(),
-            ),
-          ],
-        ),
+          const SizedBox(height: 24),
+          // Сетка столов с использованием TablesGridWidget
+          TablesGridWidget(
+            tables: filteredTables,
+            searchQuery: _searchQuery,
+            colorScheme: colorScheme,
+            style: widget.style,
+          ),
+        ],
       ),
     );
   }
@@ -245,6 +237,7 @@ class _TableArrangementWidgetState extends State<TableArrangementWidget> {
             fontSize: 28,
             fontWeight: FontWeight.w700,
             color: color,
+            fontFamily: 'Gnocchi',
           ),
         ),
         Text(

@@ -44,12 +44,14 @@ class _TableSearchWidgetState extends State<TableSearchWidget> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: widget.colorScheme.surface,
+        color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: widget.colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(
+          color: const Color(0xFF4C6444).withOpacity(0.2), // Темный зеленый
+        ),
         boxShadow: [
           BoxShadow(
-            color: widget.colorScheme.shadow.withOpacity(0.05),
+            color: const Color(0xFF4C6444).withOpacity(0.05), // Темный зеленый
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -59,7 +61,7 @@ class _TableSearchWidgetState extends State<TableSearchWidget> {
         children: [
           Icon(
             Icons.search,
-            color: widget.colorScheme.primary.withOpacity(0.7),
+            color: const Color(0xFF4C6444), // Темный зеленый
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -69,13 +71,15 @@ class _TableSearchWidgetState extends State<TableSearchWidget> {
               decoration: InputDecoration(
                 hintText: 'Поиск гостя...',
                 hintStyle: TextStyle(
-                  color: widget.colorScheme.onSurface.withOpacity(0.4),
+                  color: const Color(
+                    0xFF4C6444,
+                  ).withOpacity(0.4), // Темный зеленый
                 ),
                 border: InputBorder.none,
               ),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
-                color: widget.colorScheme.onSurface,
+                color: Color(0xFF4C6444), // Темный зеленый
               ),
             ),
           ),
@@ -85,7 +89,9 @@ class _TableSearchWidgetState extends State<TableSearchWidget> {
               icon: Icon(
                 Icons.clear,
                 size: 20,
-                color: widget.colorScheme.onSurface.withOpacity(0.4),
+                color: const Color(
+                  0xFF4C6444,
+                ).withOpacity(0.4), // Темный зеленый
               ),
             ),
         ],

@@ -41,6 +41,8 @@ class ScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     switch (style) {
       case ScheduleStyle.elegant:
         return _buildElegantStyle(context);
@@ -55,6 +57,8 @@ class ScheduleWidget extends StatelessWidget {
 
   // Стиль 1: Элегантный (по умолчанию)
   Widget _buildElegantStyle(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 500),
@@ -72,7 +76,7 @@ class ScheduleWidget extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       Colors.transparent,
-                      Theme.of(context).colorScheme.primary,
+                      colorScheme.primary, // #4C6444
                       Colors.transparent,
                     ],
                   ),
@@ -85,7 +89,7 @@ class ScheduleWidget extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.access_time_filled,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: colorScheme.primary, // #4C6444
                     size: 22,
                   ),
                   const SizedBox(width: 10),
@@ -94,8 +98,9 @@ class ScheduleWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: colorScheme.primary, // #4C6444
                       letterSpacing: 0.5,
+                      fontFamily: 'Gnocchi',
                     ),
                   ),
                 ],
@@ -106,7 +111,7 @@ class ScheduleWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w300,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                  color: colorScheme.primary.withOpacity(0.7), // #4C6444
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -117,19 +122,17 @@ class ScheduleWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Colors.white.withOpacity(0.95),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.shadow.withOpacity(0.1),
+                    color: colorScheme.primary.withOpacity(0.1), // #4C6444
                     blurRadius: 15,
                     offset: const Offset(0, 5),
                   ),
                 ],
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  color: colorScheme.primary.withOpacity(0.1), // #4C6444
                   width: 1,
                 ),
               ),
@@ -147,9 +150,9 @@ class ScheduleWidget extends StatelessWidget {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.transparent,
-                                Theme.of(
-                                  context,
-                                ).colorScheme.primary.withOpacity(0.2),
+                                colorScheme.secondary.withOpacity(
+                                  0.2,
+                                ), // #765B50
                                 Colors.transparent,
                               ],
                             ),
@@ -170,9 +173,7 @@ class ScheduleWidget extends StatelessWidget {
                   Icon(
                     Icons.star_border,
                     size: 14,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withOpacity(0.4),
+                    color: colorScheme.secondary.withOpacity(0.4), // #765B50
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -180,18 +181,14 @@ class ScheduleWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w300,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withOpacity(0.6),
+                      color: colorScheme.secondary.withOpacity(0.6), // #765B50
                     ),
                   ),
                   const SizedBox(width: 8),
                   Icon(
                     Icons.star_border,
                     size: 14,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withOpacity(0.4),
+                    color: colorScheme.secondary.withOpacity(0.4), // #765B50
                   ),
                 ],
               ),
@@ -204,6 +201,8 @@ class ScheduleWidget extends StatelessWidget {
 
   // Стиль 2: Современный с градиентами
   Widget _buildModernStyle(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 500),
@@ -215,13 +214,13 @@ class ScheduleWidget extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.surface,
-              Theme.of(context).colorScheme.surface.withOpacity(0.95),
+              Colors.white.withOpacity(0.95),
+              colorScheme.tertiary.withOpacity(0.05), // #BA9B8E
             ],
           ),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.shadow.withOpacity(0.15),
+              color: colorScheme.primary.withOpacity(0.1), // #4C6444
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -235,8 +234,8 @@ class ScheduleWidget extends StatelessWidget {
                 shaderCallback: (bounds) {
                   return LinearGradient(
                     colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.secondary,
+                      colorScheme.primary, // #4C6444
+                      colorScheme.secondary, // #765B50
                     ],
                   ).createShader(bounds);
                 },
@@ -251,6 +250,7 @@ class ScheduleWidget extends StatelessWidget {
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
+                        fontFamily: 'Gnocchi',
                       ),
                     ),
                   ],
@@ -272,16 +272,12 @@ class ScheduleWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         color: item.isHighlighted
-                            ? Theme.of(
-                                context,
-                              ).colorScheme.primary.withOpacity(0.1)
-                            : Theme.of(
-                                context,
-                              ).colorScheme.surface.withOpacity(0.7),
+                            ? colorScheme.primary.withOpacity(0.1) // #4C6444
+                            : Colors.white.withOpacity(0.8),
                         border: Border.all(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.outline.withOpacity(0.1),
+                          color: colorScheme.secondary.withOpacity(
+                            0.1,
+                          ), // #765B50
                         ),
                       ),
                       child: Row(
@@ -295,17 +291,16 @@ class ScheduleWidget extends StatelessWidget {
                               gradient: LinearGradient(
                                 colors: item.isHighlighted
                                     ? [
-                                        Theme.of(context).colorScheme.primary,
-                                        Theme.of(context).colorScheme.secondary,
+                                        colorScheme.primary, // #4C6444
+                                        colorScheme.secondary, // #765B50
                                       ]
                                     : [
-                                        Theme.of(
-                                          context,
-                                        ).colorScheme.surfaceVariant,
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .surfaceVariant
-                                            .withOpacity(0.8),
+                                        colorScheme.tertiary.withOpacity(
+                                          0.2,
+                                        ), // #BA9B8E
+                                        colorScheme.secondary.withOpacity(
+                                          0.2,
+                                        ), // #765B50
                                       ],
                               ),
                             ),
@@ -313,8 +308,8 @@ class ScheduleWidget extends StatelessWidget {
                               item.icon,
                               size: 20,
                               color: item.isHighlighted
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.primary,
+                                  ? Colors.white
+                                  : colorScheme.primary, // #4C6444
                             ),
                           ),
 
@@ -327,9 +322,9 @@ class ScheduleWidget extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primary.withOpacity(0.1),
+                              color: colorScheme.secondary.withOpacity(
+                                0.1,
+                              ), // #765B50
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -337,7 +332,7 @@ class ScheduleWidget extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: colorScheme.primary, // #4C6444
                               ),
                             ),
                           ),
@@ -354,9 +349,7 @@ class ScheduleWidget extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
+                                    color: colorScheme.primary, // #4C6444
                                   ),
                                 ),
                                 if (item.description != null)
@@ -365,9 +358,9 @@ class ScheduleWidget extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w300,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface.withOpacity(0.6),
+                                      color: colorScheme.secondary.withOpacity(
+                                        0.7,
+                                      ), // #765B50
                                     ),
                                   ),
                               ],
@@ -388,6 +381,8 @@ class ScheduleWidget extends StatelessWidget {
 
   // Стиль 3: Минималистичный
   Widget _buildMinimalStyle(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 400),
@@ -401,7 +396,8 @@ class ScheduleWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: colorScheme.primary, // #4C6444
+                  fontFamily: 'Gnocchi',
                 ),
               ),
 
@@ -418,7 +414,7 @@ class ScheduleWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: colorScheme.primary, // #4C6444
                       ),
                     ),
 
@@ -427,9 +423,7 @@ class ScheduleWidget extends StatelessWidget {
                     Icon(
                       Icons.arrow_forward_rounded,
                       size: 16,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withOpacity(0.5),
+                      color: colorScheme.secondary.withOpacity(0.5), // #765B50
                     ),
 
                     const SizedBox(width: 12),
@@ -443,7 +437,7 @@ class ScheduleWidget extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w400,
-                              color: Theme.of(context).colorScheme.onSurface,
+                              color: colorScheme.primary, // #4C6444
                             ),
                           ),
                           if (item.description != null)
@@ -451,9 +445,9 @@ class ScheduleWidget extends StatelessWidget {
                               item.description!,
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withOpacity(0.6),
+                                color: colorScheme.secondary.withOpacity(
+                                  0.7,
+                                ), // #765B50
                               ),
                             ),
                         ],
@@ -463,9 +457,7 @@ class ScheduleWidget extends StatelessWidget {
                     Icon(
                       item.icon,
                       size: 20,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withOpacity(0.7),
+                      color: colorScheme.secondary, // #765B50
                     ),
                   ],
                 ),
@@ -479,6 +471,8 @@ class ScheduleWidget extends StatelessWidget {
 
   // Стиль 4: Таймлайн
   Widget _buildTimelineStyle(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 500),
@@ -496,7 +490,8 @@ class ScheduleWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: colorScheme.primary, // #4C6444
+                        fontFamily: 'Gnocchi',
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -505,7 +500,12 @@ class ScheduleWidget extends StatelessWidget {
                       height: 3,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: Theme.of(context).colorScheme.primary,
+                        gradient: LinearGradient(
+                          colors: [
+                            colorScheme.primary, // #4C6444
+                            colorScheme.secondary, // #765B50
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -524,15 +524,9 @@ class ScheduleWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Theme.of(
-                            context,
-                          ).colorScheme.primary.withOpacity(0.1),
-                          Theme.of(
-                            context,
-                          ).colorScheme.primary.withOpacity(0.6),
-                          Theme.of(
-                            context,
-                          ).colorScheme.primary.withOpacity(0.1),
+                          colorScheme.tertiary.withOpacity(0.1), // #BA9B8E
+                          colorScheme.secondary, // #765B50
+                          colorScheme.tertiary.withOpacity(0.1), // #BA9B8E
                         ],
                       ),
                     ),
@@ -556,18 +550,22 @@ class ScheduleWidget extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: scheduleItems[i].isHighlighted
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.surface,
+                                    ? colorScheme
+                                          .primary // #4C6444
+                                    : Colors.white,
                                 border: Border.all(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: scheduleItems[i].isHighlighted
+                                      ? colorScheme
+                                            .primary // #4C6444
+                                      : colorScheme.secondary, // #765B50
                                   width: 2,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: scheduleItems[i].isHighlighted
-                                        ? Theme.of(
-                                            context,
-                                          ).colorScheme.primary.withOpacity(0.3)
+                                        ? colorScheme.primary.withOpacity(
+                                            0.3,
+                                          ) // #4C6444
                                         : Colors.transparent,
                                     blurRadius: 8,
                                     spreadRadius: 2,
@@ -578,8 +576,8 @@ class ScheduleWidget extends StatelessWidget {
                                 scheduleItems[i].icon,
                                 size: 15,
                                 color: scheduleItems[i].isHighlighted
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : Theme.of(context).colorScheme.primary,
+                                    ? Colors.white
+                                    : colorScheme.secondary, // #765B50
                               ),
                             ),
 
@@ -591,7 +589,7 @@ class ScheduleWidget extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: colorScheme.primary, // #4C6444
                                 ),
                               ),
                             ),
@@ -604,18 +602,21 @@ class ScheduleWidget extends StatelessWidget {
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
                                   color: scheduleItems[i].isHighlighted
-                                      ? Theme.of(
-                                          context,
-                                        ).colorScheme.primary.withOpacity(0.05)
-                                      : Theme.of(context)
-                                            .colorScheme
-                                            .surfaceVariant
-                                            .withOpacity(0.3),
+                                      ? colorScheme.primary.withOpacity(
+                                          0.05,
+                                        ) // #4C6444
+                                      : colorScheme.tertiary.withOpacity(
+                                          0.05,
+                                        ), // #BA9B8E
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.outline.withOpacity(0.1),
+                                    color: scheduleItems[i].isHighlighted
+                                        ? colorScheme.primary.withOpacity(
+                                            0.2,
+                                          ) // #4C6444
+                                        : colorScheme.secondary.withOpacity(
+                                            0.1,
+                                          ), // #765B50
                                   ),
                                 ),
                                 child: Column(
@@ -629,9 +630,10 @@ class ScheduleWidget extends StatelessWidget {
                                             scheduleItems[i].isHighlighted
                                             ? FontWeight.w600
                                             : FontWeight.w500,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onSurface,
+                                        color: scheduleItems[i].isHighlighted
+                                            ? colorScheme
+                                                  .primary // #4C6444
+                                            : colorScheme.secondary, // #765B50
                                       ),
                                     ),
                                     if (scheduleItems[i].description != null)
@@ -641,10 +643,8 @@ class ScheduleWidget extends StatelessWidget {
                                           scheduleItems[i].description!,
                                           style: TextStyle(
                                             fontSize: 13,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface
-                                                .withOpacity(0.6),
+                                            color: colorScheme.secondary
+                                                .withOpacity(0.7), // #765B50
                                           ),
                                         ),
                                       ),
@@ -667,12 +667,14 @@ class ScheduleWidget extends StatelessWidget {
 
   // Метод для создания элемента расписания (используется в элегантном стиле)
   Widget _buildScheduleItem(BuildContext context, ScheduleItem item) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: item.isHighlighted
-            ? Theme.of(context).colorScheme.primary.withOpacity(0.05)
+            ? colorScheme.primary.withOpacity(0.05) // #4C6444
             : Colors.transparent,
       ),
       child: Row(
@@ -684,16 +686,17 @@ class ScheduleWidget extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: item.isHighlighted
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  ? colorScheme
+                        .primary // #4C6444
+                  : colorScheme.secondary.withOpacity(0.1), // #765B50
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
               item.icon,
               size: 20,
               color: item.isHighlighted
-                  ? Theme.of(context).colorScheme.onPrimary
-                  : Theme.of(context).colorScheme.primary,
+                  ? Colors.white
+                  : colorScheme.secondary, // #765B50
             ),
           ),
 
@@ -709,7 +712,7 @@ class ScheduleWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: colorScheme.primary, // #4C6444
                   ),
                 ),
                 Text(
@@ -717,7 +720,7 @@ class ScheduleWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: colorScheme.primary, // #4C6444
                   ),
                 ),
                 if (item.description != null)
@@ -728,9 +731,9 @@ class ScheduleWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w300,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.6),
+                        color: colorScheme.secondary.withOpacity(
+                          0.7,
+                        ), // #765B50
                         fontStyle: FontStyle.italic,
                       ),
                     ),
