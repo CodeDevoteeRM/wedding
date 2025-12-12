@@ -95,7 +95,7 @@ class _TableArrangementWidgetState extends State<TableArrangementWidget> {
         'Артём Посыльный',
         'Юлия Бережнова',
         'Варвара Руднева',
-        'Любовь ',
+        // 'Любовь Гаврюкова',
         // '',
       ],
     ),
