@@ -206,129 +206,59 @@ class _WeddingInvitationState extends State<WeddingInvitation>
     super.dispose();
   }
 
-  Future<void> _startMusic() async {
-    // Небольшая задержка для инициализации
-    await Future.delayed(const Duration(milliseconds: 500));
 
-    // Проверяем, на какой платформе мы
-    if (kIsWeb) {
-      // На web автоматический запуск может быть заблокирован браузером
-      // Лучше добавить кнопку для пользователя
-      _initializeMusicWithUserInteraction();
-    } else {
-      // На мобильных можно запускать сразу
-      await _musicPlayer.initialize();
-      await _musicPlayer.play();
-    }
-  }
-
-  void _initializeMusicWithUserInteraction() {
-    // Инициализируем, но не запускаем
-    _musicPlayer.initialize();
-
-    // Добавляем слушатель на первый тап пользователя
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          backgroundColor: Colors.white.withOpacity(0.95),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: const Text(
-            'Фоновое музыкальное сопровождение',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Color(0xFF4C6444), fontFamily: 'Gnocchi'),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.music_note, size: 50, color: Color(0xFF4C6444)),
-              const SizedBox(height: 15),
-              const Text(
-                'Хотите включить фоновую музыку?',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF765B50)),
-              ),
-            ],
-          ),
-          actions: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _musicPlayer.play();
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color(0xFF4C6444),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      'Включить',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color(0xFF765B50).withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text(
-                      'Позже',
-                      style: TextStyle(color: Color(0xFF765B50)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
-  }
 
   Widget _buildMusicControlButton() {
-    return GestureDetector(
-      onTap: () {
-        if (_musicPlayer.isPlaying) {
-          _musicPlayer.pause();
-        } else {
-          _musicPlayer.play();
-        }
-        setState(() {});
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
+  return GestureDetector(
+    onTap: () async {
+      if (_musicPlayer.isPlaying) {
+        await _musicPlayer.pause();
+      } else {
+        // Показываем уведомление при первом включении
+        if (!_musicPlayer.isPlaying) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Музыка включена 🎵'),
+              duration: Duration(seconds: 2),
+              backgroundColor: Color(0xFF4C6444),
             ),
-          ],
-        ),
-        child: Icon(
-          _musicPlayer.isPlaying ? Icons.music_note : Icons.music_off,
-          color: const Color(0xFF4C6444),
-          size: 24,
+          );
+        }
+        await _musicPlayer.play();
+      }
+      setState(() {});
+    },
+    child: Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+        border: Border.all(
+          color: Color(0xFF4C6444).withOpacity(0.3),
+          width: 1,
         ),
       ),
-    );
-  }
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _musicPlayer.isPlaying ? Icons.music_note : Icons.music_off,
+            color: Color(0xFF4C6444),
+            size: 20,
+          ),
+          
+        ],
+      ),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {

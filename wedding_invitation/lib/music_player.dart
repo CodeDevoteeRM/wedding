@@ -8,19 +8,19 @@ class MusicPlayer {
 
   Future<void> initialize() async {
     if (_isInitialized) return;
-    
+
     try {
       _player = AudioPlayer();
-      
+
       // Ключевое исправление для веб-версии
       if (kIsWeb) {
         // Путь должен быть правильным относительно корня сайта
-        await _player!.setSourceUrl('/assets/audio/East_Duo.mp3');
+        await _player!.setSourceUrl('/assets/audio/Kai_Rosenkranz.mp3');
         print('✅ Web: аудио загружено по URL');
       } else {
-        await _player!.setSource(AssetSource('audio/East_Duo.mp3'));
+        await _player!.setSource(AssetSource('audio/Kai_Rosenkranz.mp3'));
       }
-      
+
       await _player!.setReleaseMode(ReleaseMode.loop);
       await _player!.setVolume(0.7); // Настроим громкость
       _isInitialized = true;
@@ -34,7 +34,7 @@ class MusicPlayer {
     if (!_isInitialized) {
       await initialize();
     }
-    
+
     try {
       // На веб-версии музыку можно включать только по действию пользователя
       await _player!.resume();
