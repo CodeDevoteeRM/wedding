@@ -196,69 +196,68 @@ class _WeddingInvitationState extends State<WeddingInvitation>
 
     // Запуск музыки с учетом платформы
     // _startMusicBasedOnPlatform();
-    _musicPlayer.initialize();
+    _musicPlayer.initialize().then((_) {
+      print('✅ Плеер готов к работе');
+    });
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    _musicPlayer.stop();
+    // _musicPlayer.stop();
     super.dispose();
   }
 
-
-
   Widget _buildMusicControlButton() {
-  return GestureDetector(
-    onTap: () async {
-      if (_musicPlayer.isPlaying) {
-        await _musicPlayer.pause();
-      } else {
-        // Показываем уведомление при первом включении
-        if (!_musicPlayer.isPlaying) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Музыка включена 🎵'),
-              duration: Duration(seconds: 2),
-              backgroundColor: Color(0xFF4C6444),
-            ),
-          );
+    return GestureDetector(
+      onTap: () async {
+        if (_musicPlayer.isPlaying) {
+          await _musicPlayer.pause();
+        } else {
+          // Показываем уведомление при первом включении
+          if (!_musicPlayer.isPlaying) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Музыка включена 🎵'),
+                duration: Duration(seconds: 2),
+                backgroundColor: Color(0xFF4C6444),
+              ),
+            );
+          }
+          await _musicPlayer.play();
         }
-        await _musicPlayer.play();
-      }
-      setState(() {});
-    },
-    child: Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+        setState(() {});
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+          border: Border.all(
+            color: Color(0xFF4C6444).withOpacity(0.3),
+            width: 1,
           ),
-        ],
-        border: Border.all(
-          color: Color(0xFF4C6444).withOpacity(0.3),
-          width: 1,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              _musicPlayer.isPlaying ? Icons.music_note : Icons.music_off,
+              color: Color(0xFF4C6444),
+              size: 20,
+            ),
+          ],
         ),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            _musicPlayer.isPlaying ? Icons.music_note : Icons.music_off,
-            color: Color(0xFF4C6444),
-            size: 20,
-          ),
-          
-        ],
-      ),
-    ),
-  );
-}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

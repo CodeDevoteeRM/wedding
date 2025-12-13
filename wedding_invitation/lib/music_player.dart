@@ -4,26 +4,22 @@ import 'package:flutter/foundation.dart';
 class MusicPlayer {
   AudioPlayer? _player;
   bool _isPlaying = false;
-  bool _isInitialized = false;
 
   Future<void> initialize() async {
-    if (_isInitialized) return;
-
     try {
       _player = AudioPlayer();
-
-      // Ключевое исправление для веб-версии
+      
+      // Ключевое исправление для веб-версии GitHub Pages
       if (kIsWeb) {
-        // Путь должен быть правильным относительно корня сайта
-        await _player!.setSourceUrl('/assets/audio/Kai_Rosenkranz.mp3');
+        // Правильный путь для GitHub Pages
+        await _player!.setSourceUrl('assets/audio/Kai_Rosenkranz.mp3');
         print('✅ Web: аудио загружено по URL');
       } else {
         await _player!.setSource(AssetSource('audio/Kai_Rosenkranz.mp3'));
       }
-
+      
       await _player!.setReleaseMode(ReleaseMode.loop);
-      await _player!.setVolume(0.7); // Настроим громкость
-      _isInitialized = true;
+      await _player!.setVolume(0.7);
       print('Музыка инициализирована');
     } catch (e) {
       print('❌ Ошибка инициализации музыки: $e');
@@ -31,17 +27,20 @@ class MusicPlayer {
   }
 
   Future<void> play() async {
-    if (!_isInitialized) {
-      await initialize();
-    }
-
     try {
-      // На веб-версии музыку можно включать только по действию пользователя
+      if (_player == null) await initialize();
       await _player!.resume();
       _isPlaying = true;
-      print('▶️ Музыка играет');
+      print('▶️ Музыка играет (web)');
     } catch (e) {
       print('❌ Ошибка воспроизведения: $e');
+      // Попробуем альтернативный метод
+      try {
+        await _player!.play(UrlSource('assets/audio/East_Duo.mp3'));
+        _isPlaying = true;
+      } catch (e2) {
+        print('❌ И альтернативный метод не сработал: $e2');
+      }
     }
   }
 
@@ -49,18 +48,8 @@ class MusicPlayer {
     try {
       await _player?.pause();
       _isPlaying = false;
-      print('⏸️ Музыка на паузе');
     } catch (e) {
       print('❌ Ошибка паузы: $e');
-    }
-  }
-
-  Future<void> stop() async {
-    try {
-      await _player?.stop();
-      _isPlaying = false;
-    } catch (e) {
-      print('❌ Ошибка остановки: $e');
     }
   }
 
