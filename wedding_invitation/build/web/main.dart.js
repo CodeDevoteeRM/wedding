@@ -78224,7 +78224,7 @@ n=A.ad(k)
 A.fR("\u274c \u041e\u0448\u0438\u0431\u043a\u0430 \u0432\u043e\u0441\u043f\u0440\u043e\u0438\u0437\u0432\u0435\u0434\u0435\u043d\u0438\u044f: "+A.m(n))
 q=11
 s=14
-return A.M(o.a.t5(new A.KG("assets/audio/East_Duo.mp3",null)),$async$oS)
+return A.M(o.a.t5(new A.KG("assets/audio/Kai_Rosenkranz.mp3",null)),$async$oS)
 case 14:o.b=!0
 q=2
 s=13

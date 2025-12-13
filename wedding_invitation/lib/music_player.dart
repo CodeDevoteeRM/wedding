@@ -36,7 +36,7 @@ class MusicPlayer {
       print('❌ Ошибка воспроизведения: $e');
       // Попробуем альтернативный метод
       try {
-        await _player!.play(UrlSource('assets/audio/East_Duo.mp3'));
+        await _player!.play(UrlSource('assets/audio/Kai_Rosenkranz.mp3'));
         _isPlaying = true;
       } catch (e2) {
         print('❌ И альтернативный метод не сработал: $e2');
