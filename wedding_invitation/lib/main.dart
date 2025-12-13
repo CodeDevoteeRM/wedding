@@ -196,7 +196,7 @@ class _WeddingInvitationState extends State<WeddingInvitation>
 
     // Запуск музыки с учетом платформы
     // _startMusicBasedOnPlatform();
-    _startMusic();
+    _musicPlayer.initialize();
   }
 
   @override
