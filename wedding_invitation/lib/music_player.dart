@@ -1,24 +1,35 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 
 class MusicPlayer {
   static final MusicPlayer _instance = MusicPlayer._internal();
   factory MusicPlayer() => _instance;
   MusicPlayer._internal();
 
-  final AudioPlayer _player = AudioPlayer();
+  late AudioPlayer _player;
   bool _isPlaying = false;
   bool _isInitialized = false;
 
   Future<void> initialize() async {
     if (_isInitialized) return;
-    
+
     try {
-      await _player.setSource(AssetSource('audio/wedding_music.mp3'));
+      _player = AudioPlayer();
+      
+      // Ключевое исправление: разные пути для web и мобильных
+      if (kIsWeb) {
+        // Для web используем полный путь от корня сайта
+        await _player.setSourceUrl('/wedding/assets/audio/Kai_Rosenkranz.mp3');
+        print('✅ Web: аудио загружено по URL');
+      } else {
+        // Для мобильных приложений
+        await _player.setSource(AssetSource('audio/Kai_Rosenkranz.mp3'));
+        print('✅ Mobile: аудио загружено из assets');
+      }
+
       await _player.setReleaseMode(ReleaseMode.loop);
-      await _player.setVolume(0.7); // Громкость 70%
       _isInitialized = true;
-      print('✅ Музыка инициализирована');
+      print('Музыка инициализирована');
     } catch (e) {
       print('❌ Ошибка инициализации музыки: $e');
     }
@@ -28,7 +39,7 @@ class MusicPlayer {
     if (!_isInitialized) {
       await initialize();
     }
-    
+
     try {
       await _player.resume();
       _isPlaying = true;
@@ -36,12 +47,6 @@ class MusicPlayer {
     } catch (e) {
       print('❌ Ошибка воспроизведения: $e');
     }
-  }
-
-  Future<void> playWithDelay() async {
-    // Для Android/iOS - небольшая задержка перед запуском
-    await Future.delayed(const Duration(milliseconds: 800));
-    await play();
   }
 
   Future<void> pause() async {
@@ -64,16 +69,5 @@ class MusicPlayer {
     }
   }
 
-  Future<void> setVolume(double volume) async {
-    try {
-      await _player.setVolume(volume);
-    } catch (e) {
-      print('❌ Ошибка настройки громкости: $e');
-    }
-  }
-
   bool get isPlaying => _isPlaying;
-  
-  // Проверяем, можем ли автозапускать музыку
-  bool get canAutoPlay => !kIsWeb; // Только для Android/iOS, не для web
 }

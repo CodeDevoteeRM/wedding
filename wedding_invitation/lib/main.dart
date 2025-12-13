@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_invitation/music_player.dart';
 // import 'package:wedding_invitation/music_player.dart';
 import 'package:wedding_invitation/widgets/calendar.dart' as calendar_widget;
 import 'package:wedding_invitation/widgets/location.dart';
@@ -13,7 +14,12 @@ import 'package:wedding_invitation/widgets/table_arrangement.dart';
 import 'types.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  // Оптимизация для web
+  if (kIsWeb) {
+    // Улучшаем производительность на web
+    WidgetsFlutterBinding.ensureInitialized();
+  }
+
   runApp(const WeddingApp());
 }
 
@@ -178,7 +184,7 @@ class _WeddingInvitationState extends State<WeddingInvitation>
   ];
 
   late AnimationController _animationController;
-  // final MusicPlayer _musicPlayer = MusicPlayer();
+  final MusicPlayer _musicPlayer = MusicPlayer();
 
   @override
   void initState() {
@@ -190,13 +196,138 @@ class _WeddingInvitationState extends State<WeddingInvitation>
 
     // Запуск музыки с учетом платформы
     // _startMusicBasedOnPlatform();
+    _startMusic();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    // _musicPlayer.stop();
+    _musicPlayer.stop();
     super.dispose();
+  }
+
+  Future<void> _startMusic() async {
+    // Небольшая задержка для инициализации
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Проверяем, на какой платформе мы
+    if (kIsWeb) {
+      // На web автоматический запуск может быть заблокирован браузером
+      // Лучше добавить кнопку для пользователя
+      _initializeMusicWithUserInteraction();
+    } else {
+      // На мобильных можно запускать сразу
+      await _musicPlayer.initialize();
+      await _musicPlayer.play();
+    }
+  }
+
+  void _initializeMusicWithUserInteraction() {
+    // Инициализируем, но не запускаем
+    _musicPlayer.initialize();
+
+    // Добавляем слушатель на первый тап пользователя
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.white.withOpacity(0.95),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Фоновое музыкальное сопровождение',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Color(0xFF4C6444), fontFamily: 'Gnocchi'),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.music_note, size: 50, color: Color(0xFF4C6444)),
+              const SizedBox(height: 15),
+              const Text(
+                'Хотите включить фоновую музыку?',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFF765B50)),
+              ),
+            ],
+          ),
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _musicPlayer.play();
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color(0xFF4C6444),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Включить',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color(0xFF765B50).withOpacity(0.1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Позже',
+                      style: TextStyle(color: Color(0xFF765B50)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _buildMusicControlButton() {
+    return GestureDetector(
+      onTap: () {
+        if (_musicPlayer.isPlaying) {
+          _musicPlayer.pause();
+        } else {
+          _musicPlayer.play();
+        }
+        setState(() {});
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Icon(
+          _musicPlayer.isPlaying ? Icons.music_note : Icons.music_off,
+          color: const Color(0xFF4C6444),
+          size: 24,
+        ),
+      ),
+    );
   }
 
   @override
@@ -267,6 +398,7 @@ class _WeddingInvitationState extends State<WeddingInvitation>
           // // Кнопка управления музыкой (видна только если музыка доступна)
           // if (_musicPlayer.canAutoPlay)
           //   Positioned(top: 160, right: 20, child: _buildMusicControlButton()),
+          Positioned(top: 160, right: 20, child: _buildMusicControlButton()),
         ],
       ),
     );
@@ -317,13 +449,10 @@ class _WeddingInvitationState extends State<WeddingInvitation>
   //     print('🌐 Web версия - автозапуск музыки отключен');
   //     return;
   //   }
-
   //   // Для Android и iOS - запускаем автоматически
   //   print('📱 Мобильная версия - запускаем музыку автоматически');
-
   //   // Небольшая задержка для инициализации
   //   await Future.delayed(const Duration(milliseconds: 500));
-
   //   try {
   //     await _musicPlayer.initialize();
   //     await _musicPlayer.playWithDelay();

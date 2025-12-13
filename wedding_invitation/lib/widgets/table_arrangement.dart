@@ -37,7 +37,7 @@ class _TableArrangementWidgetState extends State<TableArrangementWidget> {
         'Варуж Бегоян',
         'Карине Бегоян',
         'Айк Манукян',
-        'Манан Манукян',
+        'Манана Асатрян',
         'Комс Манукян',
         'Армен Асатрян',
         'Ася Амирханян',
