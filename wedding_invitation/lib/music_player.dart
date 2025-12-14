@@ -4,16 +4,15 @@ import 'package:flutter/foundation.dart';
 class MusicPlayer {
   AudioPlayer? _player;
   bool _isPlaying = false;
-
+  
   Future<void> initialize() async {
     try {
       _player = AudioPlayer();
       
-      // Ключевое исправление для веб-версии GitHub Pages
       if (kIsWeb) {
-        // Правильный путь для GitHub Pages
-        await _player!.setSourceUrl('assets/audio/Kai_Rosenkranz.mp3');
-        print('✅ Web: аудио загружено по URL');
+        // ВАЖНО: Правильный путь для веб-версии после сборки Flutter
+        await _player!.setSourceUrl('assets/assets/audio/Kai_Rosenkranz.mp3');
+        print('✅ Web: аудио загружено: assets/assets/audio/Kai_Rosenkranz.mp3');
       } else {
         await _player!.setSource(AssetSource('audio/Kai_Rosenkranz.mp3'));
       }
@@ -29,18 +28,18 @@ class MusicPlayer {
   Future<void> play() async {
     try {
       if (_player == null) await initialize();
-      await _player!.resume();
+      
+      if (kIsWeb) {
+        // Для веб всегда используем play() с UrlSource
+        await _player!.play(UrlSource('assets/assets/audio/Kai_Rosenkranz.mp3'));
+      } else {
+        await _player!.resume();
+      }
+      
       _isPlaying = true;
-      print('▶️ Музыка играет (web)');
+      print('▶️ Музыка играет');
     } catch (e) {
       print('❌ Ошибка воспроизведения: $e');
-      // Попробуем альтернативный метод
-      try {
-        await _player!.play(UrlSource('assets/audio/Kai_Rosenkranz.mp3'));
-        _isPlaying = true;
-      } catch (e2) {
-        print('❌ И альтернативный метод не сработал: $e2');
-      }
     }
   }
 
@@ -48,6 +47,7 @@ class MusicPlayer {
     try {
       await _player?.pause();
       _isPlaying = false;
+      print('⏸️ Музыка на паузе');
     } catch (e) {
       print('❌ Ошибка паузы: $e');
     }
